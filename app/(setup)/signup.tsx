@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default function SignUpScreen() {
+export default function SignupPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -24,9 +24,9 @@ export default function SignUpScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Logo */}
       <Image
-        source={require("@/assets/images/logo.png")} // Replace with your actual logo path
+        source={require("@/assets/images/logo-name.png")}
         style={styles.logo}
-        resizeMode="contain"
+        resizeMode="covered"
       />
 
       {/* Title */}
@@ -138,9 +138,17 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   logo: {
-    width: 130,
-    height: 50,
+    width: 140,
+    height: 40,
     marginBottom: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
   },
   title: {
     fontSize: 24,

@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function WelcomeScreen() {
+export default function WelcomePage() {
   const router = useRouter();
 
   return (
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5, // Android shadow
+    elevation: 5,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 15,
