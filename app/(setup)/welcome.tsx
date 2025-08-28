@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       {/* App Logo */}
       <Image
-        source={require("@/assets/images//logo.png")}
+        source={require("@/assets/images/logo.png")}
         style={styles.logo}
         resizeMode="cover"
       />
@@ -27,7 +27,7 @@ export default function WelcomeScreen() {
       {/* Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("../(tabs)")}
+        onPress={() => router.push("../signup")}
       >
         <Text style={styles.buttonText}>Let the journey begin!</Text>
       </TouchableOpacity>
