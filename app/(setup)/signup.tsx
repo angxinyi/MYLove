@@ -1,5 +1,8 @@
+import { auth, db } from "@/firebase/config";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {
   Image,
@@ -21,12 +24,85 @@ export default function SignupPage() {
   const [month, setMonth] = useState("Month");
   const [year, setYear] = useState("Year");
 
+  async function handleSignup() {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      day === "Day" ||
+      month === "Month" ||
+      year === "Year"
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    console.log("Attempting signup with:", { name, email, day, month, year });
+    try {
+      // Create the user in Firebase Auth
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const uid = userCred.user.uid;
+
+      // Convert month string to index for Date
+      const monthIndex = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ].indexOf(month);
+
+      // Create a proper Date object for Anniversary
+      // Note: monthIndex is 0-based, so January is 0
+      const anniversary = new Date(parseInt(year), monthIndex, parseInt(day));
+
+      // Format as dd/mm/yyyy
+      const formattedAnniversary = `${("0" + anniversary.getDate()).slice(
+        -2
+      )}/${("0" + (anniversary.getMonth() + 1)).slice(
+        -2
+      )}/${anniversary.getFullYear()}`;
+
+      console.log("anniversary", formattedAnniversary);
+
+      // Save user profile in Firestore
+      try {
+        await setDoc(doc(db, "users", uid), {
+          name,
+          email,
+          formattedAnniversary,
+          createdAt: serverTimestamp(),
+        });
+        console.log("User saved in Firestore!");
+      } catch (firestoreError) {
+        console.error("Firestore error:", firestoreError);
+      }
+
+      // Navigate to next page after signup (FIX)
+      router.push("/love-language-quiz");
+    } catch (err: any) {
+      console.error("Signup error:", err.message);
+      alert(err.message);
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Logo */}
       <Image
         source={require("@/assets/images/logo-name.png")}
-        style={styles.logo}
+        style={styles.logoName}
         resizeMode="cover"
       />
 
@@ -116,7 +192,7 @@ export default function SignupPage() {
       </View>
 
       {/* Sign Up Button */}
-      <TouchableOpacity style={styles.signUpButton}>
+      <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
         <Text style={styles.signUpText}>Sign Up</Text>
       </TouchableOpacity>
 
@@ -130,7 +206,7 @@ export default function SignupPage() {
       {/* Login Button */}
       <TouchableOpacity
         style={styles.loginButton}
-        // onPress={() => router.push("/login")} // Update route as needed
+        onPress={() => router.push("/login")}
       >
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
@@ -147,7 +223,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     flexGrow: 1,
   },
-  logo: {
+  logoName: {
     width: 140,
     height: 50,
     marginBottom: 20,
