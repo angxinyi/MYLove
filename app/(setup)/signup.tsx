@@ -196,20 +196,28 @@ export default function SignupPage() {
         <Text style={styles.signUpText}>Sign Up</Text>
       </TouchableOpacity>
 
+      {/* Sign Up Link */}
+      <View style={styles.loginContainer}>
+        <Text style={styles.loginText}>Already have an account? </Text>
+        <TouchableOpacity onPress={() => router.push("/login")}>
+          <Text style={styles.loginLink}>Login</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Divider */}
-      <View style={styles.dividerContainer}>
+      {/* <View style={styles.dividerContainer}>
         <View style={styles.line} />
         <Text style={styles.or}>or</Text>
         <View style={styles.line} />
-      </View>
+      </View> */}
 
       {/* Login Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.loginButton}
         onPress={() => router.push("/login")}
       >
         <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 }
@@ -287,9 +295,12 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     borderWidth: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 30,
+    width: "100%",
     borderRadius: 8,
+    marginBottom: 25,
+    marginTop: 10,
     alignSelf: "flex-end",
     borderColor: "#ff9197",
     backgroundColor: "#fcd7d7",
@@ -297,37 +308,52 @@ const styles = StyleSheet.create({
   signUpText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#2E2E2E",
-  },
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 25,
-    width: "100%",
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#aaa",
-  },
-  or: {
-    marginHorizontal: 10,
-    fontSize: 20,
-    color: "#333",
-  },
-  loginButton: {
-    borderWidth: 1,
-    paddingVertical: 14,
-    width: "100%",
-    borderRadius: 10,
-    marginBottom: 50,
-    borderColor: "#ff9197",
-    backgroundColor: "#fcd7d7",
-  },
-  loginText: {
-    fontSize: 16,
-    fontWeight: "600",
     alignSelf: "center",
     color: "#2E2E2E",
   },
+  loginContainer: {
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    marginBottom: 100,
+  },
+  loginText: {
+    fontSize: 14,
+    color: "#2E2E2E",
+  },
+  loginLink: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#ff9197",
+  },
+  // dividerContainer: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   marginVertical: 25,
+  //   width: "100%",
+  // },
+  // line: {
+  //   flex: 1,
+  //   height: 1,
+  //   backgroundColor: "#aaa",
+  // },
+  // or: {
+  //   marginHorizontal: 10,
+  //   fontSize: 20,
+  //   color: "#333",
+  // },
+  // loginButton: {
+  //   borderWidth: 1,
+  //   paddingVertical: 14,
+  //   width: "100%",
+  //   borderRadius: 10,
+  //   marginBottom: 50,
+  //   borderColor: "#ff9197",
+  //   backgroundColor: "#fcd7d7",
+  // },
+  // loginText: {
+  //   fontSize: 16,
+  //   fontWeight: "600",
+  //   alignSelf: "center",
+  //   color: "#2E2E2E",
+  // },
 });
