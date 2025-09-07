@@ -95,7 +95,7 @@ export default function ResultPage() {
       {/* Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/(tabs)/explore")}
+        onPress={() => router.push("/(tabs)/avatar")}
       >
         <Text style={styles.buttonText}>Let’s Go!</Text>
       </TouchableOpacity>
