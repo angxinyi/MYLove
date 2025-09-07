@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function ChatScreen() {
+export default function StorePage() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>

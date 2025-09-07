@@ -3,7 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function ChatScreen() {
+export default function HomePage() {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
