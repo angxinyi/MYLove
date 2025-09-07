@@ -27,8 +27,8 @@ export default function LoginPage() {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       console.log("Logged in:", userCred.user.uid);
 
-      // Navigate to home page
-      router.push("../(tabs)/home");
+      // Navigate to home page (fix)
+      router.push("../(tabs)/avatar");
     } catch (err: any) {
       console.error("Login error:", err.message);
       alert(err.message);
