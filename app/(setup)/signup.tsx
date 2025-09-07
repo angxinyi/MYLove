@@ -89,8 +89,8 @@ export default function SignupPage() {
         console.error("Firestore error:", firestoreError);
       }
 
-      // Navigate to next page after signup (FIX)
-      router.push("/love-language-quiz");
+      // Navigate to love language page after signup
+      router.push("/love-language-quiz-welcome");
     } catch (err: any) {
       console.error("Signup error:", err.message);
       alert(err.message);
