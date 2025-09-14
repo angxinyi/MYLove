@@ -9,7 +9,7 @@ export default function WelcomePage() {
     <View style={styles.container}>
       {/* App Logo */}
       <Image
-        source={require("@/assets/images/logo.png")}
+        source={require("@/assets/images/logo/logo.png")}
         style={styles.logo}
         resizeMode="cover"
       />

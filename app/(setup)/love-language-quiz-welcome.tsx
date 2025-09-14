@@ -16,7 +16,7 @@ export default function QuizIntro() {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Logo */}
       <Image
-        source={require("@/assets/images/logo-name.png")}
+        source={require("@/assets/images/logo/logo_name.png")}
         style={styles.logoName}
         resizeMode="cover"
       />

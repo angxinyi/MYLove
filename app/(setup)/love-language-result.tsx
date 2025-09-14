@@ -50,7 +50,7 @@ export default function ResultPage() {
 
   const brief = userLang ? descriptions[userLang] || "" : "";
 
-  // Background colors for each love language (from your bubbles)
+  // Background colors for each love language
   const bgColors: Record<string, string> = {
     "Quality Time": "#F5E4C3",
     "Acts of Service": "#A6C5F7",
@@ -63,10 +63,11 @@ export default function ResultPage() {
     <View style={styles.container}>
       {/* Logo */}
       <Image
-        source={require("@/assets/images/logo-name.png")}
+        source={require("@/assets/images/logo/logo_name.png")}
         style={styles.logo}
         resizeMode="contain"
       />
+
       {/* Title */}
       <Text style={styles.title}>Your Love Language is:</Text>
       <Text
@@ -77,6 +78,7 @@ export default function ResultPage() {
       >
         {userLang || "Loading..."}
       </Text>
+
       {/* Description Box */}
       <View
         style={[
@@ -86,12 +88,14 @@ export default function ResultPage() {
       >
         <Text style={styles.description}>{brief}</Text>
       </View>
+
       {/* Closing Text */}
       <Text style={styles.text}>
         Now you know what makes you feel most loved,{"\n"} keep it close to your
         heart{"\n"}
       </Text>
       <Text style={styles.text}>Are you ready to begin your journey?</Text>
+
       {/* Button */}
       <TouchableOpacity
         style={styles.button}
