@@ -12,7 +12,7 @@ export interface GenerateCodeResult {
 }
 
 // Generate a random 6-character code
-function generateRandomCode(): string {
+export function generateRandomCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
   for (let i = 0; i < 6; i++) {

@@ -1,9 +1,9 @@
 import { auth, db } from "@/firebase/config";
-import type { LangCode } from "@/services/chatServices-test";
+import type { LangCode } from "@/services/chatServices";
 import {
   clearProfileCache,
   sendLanguageChangeNotification,
-} from "@/services/chatServices-test";
+} from "@/services/chatServices";
 import { checkPairingStatus } from "@/services/coupleLogic";
 import { useRouter } from "expo-router";
 import { signOut } from "firebase/auth";

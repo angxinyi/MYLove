@@ -66,7 +66,7 @@ export interface GameHistoryItem {
 }
 
 // Get current Malaysia date string
-function getMalaysiaDateString(): string {
+export function getMalaysiaDateString(): string {
   const now = new Date();
   // Get Malaysian date using proper timezone
   const malaysiaDate = new Intl.DateTimeFormat("en-CA", {
@@ -93,7 +93,7 @@ function getMalaysiaDateStringWithCutoff(): string {
 }
 
 // Get current Malaysia reset period
-function getCurrentMalaysiaResetPeriod(): string {
+export function getCurrentMalaysiaResetPeriod(): string {
   const now = new Date();
   // Get Malaysian date using proper timezone
   const malaysiaDate = new Intl.DateTimeFormat("en-CA", {

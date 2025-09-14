@@ -1,5 +1,5 @@
 import { auth, db } from "@/firebase/config";
-import { sendMessage } from "@/services/chatServices-test";
+import { sendMessage } from "@/services/chatServices";
 import {
   checkPairingStatus,
   getCoupleGameState,

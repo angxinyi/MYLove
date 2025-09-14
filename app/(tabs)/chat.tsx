@@ -9,7 +9,7 @@ import {
   translateMessageIfNeeded,
   type Message,
   type UserProfile,
-} from "@/services/chatServices-test";
+} from "@/services/chatServices";
 import { checkPairingStatus } from "@/services/coupleLogic";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";

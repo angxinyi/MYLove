@@ -7,7 +7,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { sendMessage } from "./chatServices-test";
+import { sendMessage } from "./chatServices";
 import { checkPairingStatus } from "./coupleLogic";
 
 // Rule-based date recommendations based on love language combinations

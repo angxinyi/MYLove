@@ -1,27 +1,14 @@
 // Quick script to replace all daily questions in Firestore
-const { initializeApp } = require("firebase/app");
-const {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-} = require("firebase/firestore");
+import { addDoc, collection, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { auth, db } from "../../firebase/config";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA7JHhihKz8zVel2N6y24eIBX6hNELU2cM",
-  authDomain: "mylove-12345.firebaseapp.com",
-  projectId: "mylove-12345",
-  storageBucket: "mylove-12345.firebasestorage.app",
-  messagingSenderId: "564300186286",
-  appId: "1:564300186286:web:ef8f2998c076a43f8ba33f8ba33f",
-};
+export async function seedQuestions() {
+  if (!auth.currentUser) {
+    throw new Error("Must be authenticated");
+  }
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  console.log("Starting to seed questions from authenticated user...");
 
-async function seedQuestions() {
   // All your daily questions with categories
   const dailyQuestions = [
     // FOOD QUESTIONS
@@ -3651,4 +3638,5 @@ async function seedQuestions() {
   }
 }
 
-seedQuestions();
+// Remove direct execution - function should be called from the app when needed
+// seedQuestions();

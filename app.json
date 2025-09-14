@@ -8,6 +8,8 @@
     "scheme": "mylove",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "privacy": "unlisted",
+    "platforms": ["ios", "android"],
     "ios": {
       "supportsTablet": true
     },
