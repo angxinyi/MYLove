@@ -29,6 +29,7 @@ export default function RootLayout() {
         <Stack initialRouteName="(setup)">
           <Stack.Screen name="(setup)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(pages)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

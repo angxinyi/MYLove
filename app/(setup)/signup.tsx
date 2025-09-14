@@ -16,7 +16,6 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default function SignupPage() {
   const router = useRouter();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,30 +62,48 @@ export default function SignupPage() {
         "Dec",
       ].indexOf(month);
 
-      // Create a proper Date object for Anniversary
+      // Create a proper Date object for Date of Birth
       // Note: monthIndex is 0-based, so January is 0
-      const anniversary = new Date(parseInt(year), monthIndex, parseInt(day));
+      const dateOfBirth = new Date(parseInt(year), monthIndex, parseInt(day));
 
       // Format as dd/mm/yyyy
-      const formattedAnniversary = `${("0" + anniversary.getDate()).slice(
-        -2
-      )}/${("0" + (anniversary.getMonth() + 1)).slice(
-        -2
-      )}/${anniversary.getFullYear()}`;
+      const formattedDOB = `${("0" + dateOfBirth.getDate()).slice(-2)}/${(
+        "0" +
+        (dateOfBirth.getMonth() + 1)
+      ).slice(-2)}/${dateOfBirth.getFullYear()}`;
 
-      console.log("anniversary", formattedAnniversary);
+      console.log("dob", formattedDOB);
 
       // Save user profile in Firestore
       try {
-        await setDoc(doc(db, "users", uid), {
-          name,
+        console.log("Attempting to save user to Firestore with UID:", uid);
+        const userData = {
+          displayName: name,
           email,
-          formattedAnniversary,
+          dob: formattedDOB,
           createdAt: serverTimestamp(),
-        });
-        console.log("User saved in Firestore!");
+          selectedOutfit: {
+            hair: "hair_space-bun_black",
+            top: "top_basic_white",
+            bottom: "bottom_basic_white",
+          },
+          points: 100,
+          ownedItems: [
+            "hair_space-bun_black",
+            "top_basic_white",
+            "bottom_basic_white",
+          ],
+        };
+        console.log("User data to save:", userData);
+
+        await setDoc(doc(db, "users", uid), userData);
+        console.log("User saved in Firestore successfully!");
       } catch (firestoreError) {
         console.error("Firestore error:", firestoreError);
+        console.error(
+          "Firestore error details:",
+          JSON.stringify(firestoreError, null, 2)
+        );
       }
 
       // Navigate to love language page after signup
@@ -101,7 +118,7 @@ export default function SignupPage() {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Logo */}
       <Image
-        source={require("@/assets/images/logo-name.png")}
+        source={require("@/assets/images/logo/logo_name.png")}
         style={styles.logoName}
         resizeMode="cover"
       />
@@ -137,7 +154,7 @@ export default function SignupPage() {
       />
 
       {/* Date Picker */}
-      <Text style={styles.label}>When did your love story begin?</Text>
+      <Text style={styles.label}>What's your date of birth?</Text>
       <View style={styles.dateContainer}>
         <View style={styles.pickerDay}>
           <Picker

@@ -25,7 +25,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 // Firebase config
 const firebaseConfig = {
@@ -47,3 +48,25 @@ export const auth = initializeAuth(app, {
 
 // Initialize Firestore
 export const db = getFirestore(app);
+
+// Initialize Functions
+export const functions = getFunctions(app);
+
+// Connect to emulators in development
+if (false) { // Temporarily disabled - change to __DEV__ to re-enable
+  // Connect to Firestore emulator
+  try {
+    connectFirestoreEmulator(db, '127.0.0.1', 8081);
+  } catch (error) {
+    // Already connected
+    console.log('Firestore emulator already connected');
+  }
+  
+  // Connect to Functions emulator
+  try {
+    connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  } catch (error) {
+    // Already connected
+    console.log('Functions emulator already connected');
+  }
+}

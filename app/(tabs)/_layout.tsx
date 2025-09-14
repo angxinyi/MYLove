@@ -36,7 +36,7 @@ export default function TabLayout() {
           title: "Avatar",
           tabBarIcon: ({ color }) => (
             <Image
-              source={require("@/assets/images/heart.png")}
+              source={require("@/assets/images/icons/heart.png")}
               style={{
                 width: 28,
                 height: 28,
@@ -47,14 +47,14 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Chat */}
+      {/* Chat Test */}
       <Tabs.Screen
         name="chat"
         options={{
           title: "Chat",
           tabBarIcon: ({ color }) => (
             <Image
-              source={require("@/assets/images/chat.png")}
+              source={require("@/assets/images/icons/chat.png")}
               style={{
                 width: 28,
                 height: 28,
@@ -67,12 +67,12 @@ export default function TabLayout() {
 
       {/* Game */}
       <Tabs.Screen
-        name="game-menu"
+        name="game-selection"
         options={{
           title: "Game",
           tabBarIcon: ({ color }) => (
             <Image
-              source={require("@/assets/images/game.png")}
+              source={require("@/assets/images/icons/game.png")}
               style={{
                 width: 28,
                 height: 28,
@@ -90,7 +90,7 @@ export default function TabLayout() {
           title: "Store",
           tabBarIcon: ({ color }) => (
             <Image
-              source={require("@/assets/images/store.png")}
+              source={require("@/assets/images/icons/store.png")}
               style={{
                 width: 26,
                 height: 26,
@@ -108,7 +108,7 @@ export default function TabLayout() {
           title: "Settings",
           tabBarIcon: ({ color }) => (
             <Image
-              source={require("@/assets/images/setting.png")}
+              source={require("@/assets/images/icons/setting.png")}
               style={{
                 width: 26,
                 height: 26,

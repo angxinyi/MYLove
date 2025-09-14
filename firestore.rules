@@ -1,0 +1,175 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isCoupleMemeber(coupleId) {
+      return isAuthenticated() && 
+        request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members;
+    }
+
+    // Users can only access their own user document
+    match /users/{userId} {
+      // Full access to own document
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      
+      // Allow reading partner's basic info when paired
+      allow read: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.coupleId != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.coupleId == 
+        resource.data.coupleId;
+      
+      // Allow reading user info for invitation validation
+      allow read: if isAuthenticated();
+      
+      // Allow updating coupleId during pairing process
+      allow update: if isAuthenticated() && 
+        // User must be currently unpaired
+        (!('coupleId' in resource.data) || resource.data.coupleId == null) &&
+        // Check that we're only adding/updating coupleId and pairedAt
+        'coupleId' in request.resource.data && 'pairedAt' in request.resource.data;
+      
+      // Allow updating coupleId during unpairing process
+      allow update: if isAuthenticated() && 
+        // User must be currently paired
+        'coupleId' in resource.data && resource.data.coupleId != null &&
+        // Check that we're only removing coupleId (setting to null)
+        request.resource.data.coupleId == null &&
+        // User must be a member of the couple they're trying to unpair from
+        request.auth.uid in get(/databases/$(database)/documents/couples/$(resource.data.coupleId)).data.members;
+      
+      // User meta subcollection - for game state and personal data
+      match /meta/{metaDoc} {
+        allow read, write: if isAuthenticated() && isOwner(userId);
+      }
+    }
+
+    // Couples collection - members can read and write their couple document
+    match /couples/{coupleId} {
+      // Members can read their couple document
+      allow read: if isAuthenticated() && 
+        request.auth.uid in resource.data.members;
+      
+      // Members can create couple document (for pairing)
+      allow create: if isAuthenticated() && 
+        request.auth.uid in request.resource.data.members &&
+        request.resource.data.members.size() == 2;
+      
+      // Members can update couple document (for game state changes)
+      allow update: if isAuthenticated() && 
+        request.auth.uid in resource.data.members &&
+        // Ensure members list doesn't change in updates
+        request.resource.data.members == resource.data.members;
+      
+      // Members can delete couple document (for unpairing)
+      allow delete: if isAuthenticated() && 
+        request.auth.uid in resource.data.members;
+      
+      // Game sessions subcollection - members can read and write their couple's sessions
+      match /game_sessions/{sessionId} {
+        allow read: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members;
+        
+        // Members can create game sessions
+        allow create: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members &&
+          request.resource.data.initiatorUid == request.auth.uid;
+        
+        // Members can update game sessions (for submitting answers)
+        allow update: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members &&
+          // Only allow updating answers and completion status
+          request.resource.data.keys().hasAll(['answers']) &&
+          // Don't allow changing core session data
+          request.resource.data.initiatorUid == resource.data.initiatorUid &&
+          request.resource.data.questionId == resource.data.questionId &&
+          request.resource.data.type == resource.data.type;
+      }
+      
+      // Messages subcollection - members can read and write messages
+      match /messages/{messageId} {
+        // Members can read all messages in their couple
+        allow read: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members;
+        
+        // Members can create messages (send messages)
+        allow create: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members &&
+          request.resource.data.senderId == request.auth.uid &&
+          request.resource.data.coupleId == coupleId;
+        
+        // Members can update messages (for translations and seen status)
+        allow update: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members;
+      }
+    }
+
+    // Couple invites - allow creation and reading for pairing
+    match /couple_invites/{inviteCode} {
+      // Allow creating invites
+      allow create: if isAuthenticated() && 
+        request.resource.data.createdBy == request.auth.uid;
+      
+      // Allow reading invites for validation
+      allow read: if isAuthenticated();
+      
+      // Allow updating invites (to mark as used)
+      allow update: if isAuthenticated() && 
+        // Allow marking as used with additional fields (usedBy, usedAt)
+        request.resource.data.used == true &&
+        request.resource.data.createdBy == resource.data.createdBy;
+      
+      // Allow deleting expired invites (cleanup)
+      allow delete: if isAuthenticated() && 
+        resource.data.createdBy == request.auth.uid;
+    }
+
+    // Question pools - public read access for active questions only
+    match /daily_questions/{questionId} {
+      allow read: if isAuthenticated() && 
+        resource.data.active == true;
+      allow write: if false; // Only admins can write questions
+    }
+
+    match /choice_questions/{questionId} {
+      allow read: if isAuthenticated() && 
+        resource.data.active == true;
+      allow write: if false; // Only admins can write questions
+    }
+
+    // Challenge collection - authenticated users can read active challenges
+    match /challenges/{challengeId} {
+      allow read: if isAuthenticated() && resource.data.active == true;
+      // TEMPORARY: Allow all operations for seeding - REMOVE AFTER SEEDING
+      allow read, write, delete: if isAuthenticated();
+    }
+
+    // Date ideas collection - flat structure with love language array
+    match /date_ideas/{dateId} {
+      allow read: if resource.data.active == true;
+      // TEMPORARY: Allow all writes for seeding - REMOVE AFTER SEEDING
+      allow write: if true;
+    }
+
+    // Couple coupons collection - authenticated users can read active couple coupons
+    match /couple_coupons/{couponId} {
+      allow read: if isAuthenticated() && resource.data.active == true;
+      // TEMPORARY: Allow all operations for seeding - REMOVE AFTER SEEDING
+      allow read, write, delete: if isAuthenticated();
+    }
+
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
